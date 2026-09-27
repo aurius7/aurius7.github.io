@@ -113,29 +113,11 @@ nav a:hover {
   text-align: center;
 }
 
-.eyebrow {
-  display: inline-block;
-  font-size: 12.5px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--accent);
-  background: var(--accent-soft);
-  border: 1px solid var(--accent-line);
-  padding: 6px 14px;
-  border-radius: 999px;
-  margin-bottom: 26px;
-}
-
 h1 {
   font-size: clamp(38px, 7vw, 62px);
   line-height: 1.05;
   margin: 0 0 20px;
   letter-spacing: -0.02em;
-}
-
-h1 .kanji {
-  color: var(--accent);
 }
 
 .tagline {
@@ -197,6 +179,68 @@ h1 .kanji {
   border-radius: 999px;
 }
 
+.hero-note {
+  margin: 22px auto 0;
+  max-width: 520px;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.hero-note a {
+  color: var(--accent);
+}
+
+/* ---------- prose lists ---------- */
+
+.list {
+  display: grid;
+  gap: 2px;
+  max-width: 780px;
+}
+
+.item {
+  border-top: 1px solid var(--border);
+  padding: 22px 0;
+}
+
+.item:last-child {
+  border-bottom: 1px solid var(--border);
+}
+
+.item h3 {
+  font-size: 16.5px;
+  margin: 0 0 6px;
+  font-weight: 650;
+}
+
+.item p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 1px 5px;
+}
+
+pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+.footnote {
+  font-size: 13.5px;
+  color: var(--muted);
+  max-width: 640px;
+  margin: 20px 0 0;
+}
+
 /* ---------- sections ---------- */
 
 section {
@@ -214,46 +258,6 @@ h2 {
   max-width: 620px;
   margin: 0 0 38px;
   font-size: 16px;
-}
-
-.group-label {
-  font-size: 12.5px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin: 0 0 18px;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-  gap: 16px;
-}
-
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 22px;
-}
-
-.card h3 {
-  font-size: 16.5px;
-  margin: 0 0 8px;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-}
-
-.card h3 .ic {
-  font-size: 19px;
-}
-
-.card p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 14.5px;
 }
 
 /* ---------- permissions callout ---------- */
@@ -288,6 +292,121 @@ pre {
   color: var(--text);
 }
 
+pre + p,
+ol + p {
+  margin-top: 14px;
+}
+
+/* ---------- limitations list ---------- */
+
+.limits {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 13px;
+}
+
+.limits li {
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.limits strong {
+  color: var(--text);
+  font-weight: 650;
+}
+
+/* ---------- spec table ---------- */
+
+.spec {
+  margin: 0;
+  max-width: 780px;
+  border-top: 1px solid var(--border);
+}
+
+.spec dt {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-top: 22px;
+}
+
+.spec dd {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+/* ---------- install steps ---------- */
+
+.steps {
+  margin: 0;
+  padding-left: 22px;
+  display: grid;
+  gap: 16px;
+  max-width: 720px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.steps li::marker {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.steps pre {
+  margin-top: 11px;
+}
+
+/* ---------- faq ---------- */
+
+details {
+  border-bottom: 1px solid var(--border);
+  padding: 4px 0;
+  max-width: 780px;
+}
+
+details:first-of-type {
+  border-top: 1px solid var(--border);
+}
+
+summary {
+  cursor: pointer;
+  padding: 15px 30px 15px 0;
+  font-size: 16px;
+  font-weight: 600;
+  list-style: none;
+  position: relative;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+summary::after {
+  content: "+";
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent);
+  font-size: 20px;
+  font-weight: 400;
+}
+
+details[open] summary::after {
+  content: "\2212";
+}
+
+details p {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 15px;
+  max-width: 660px;
+}
+
 /* ---------- screenshots ---------- */
 
 .shots {
@@ -307,11 +426,6 @@ pre {
   font-size: 13.5px;
   text-align: center;
   padding: 20px;
-}
-
-.shot.filled {
-  border-style: solid;
-  background: var(--card);
 }
 
 /* ---------- support ---------- */

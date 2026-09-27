@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kura — Offline Encrypted Media Vault for Android</title>
-<meta name="description" content="Kura is an offline encrypted media vault for Android. AES-256-GCM with hardware-backed keys, zero network permissions, no ads, no tracking, no accounts.">
-<meta property="og:title" content="Kura — Offline Encrypted Media Vault">
-<meta property="og:description" content="AES-256-GCM at rest, hardware-backed keys, and not a single network permission. An offline encrypted media vault for Android with booru-style tagging.">
+<title>Kura — encrypted media vault for Android</title>
+<meta name="description" content="Kura is an offline encrypted media vault for Android. AES-256-GCM, keys in the Android Keystore, and a single USE_BIOMETRIC permission. No INTERNET permission, no analytics, no accounts.">
+<meta property="og:title" content="Kura — encrypted media vault for Android">
+<meta property="og:description" content="AES-256-GCM at rest, keys in the Android Keystore, and not one network permission. A 2.8 MB offline vault with booru-style tagging.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#121212">
 <link rel="stylesheet" href="assets/style.css">
@@ -17,9 +17,11 @@
   <div class="wrap">
     <a class="brand" href="#top"><span class="mark">蔵</span> Kura</a>
     <nav>
-      <a href="#security">Security</a>
-      <a href="#tagging">Tagging</a>
-      <a href="#permissions">Permissions</a>
+      <a href="#protect">Security</a>
+      <a href="#limits">Limits</a>
+      <a href="#built">Details</a>
+      <a href="#install">Install</a>
+      <a href="#faq">FAQ</a>
       <a href="#support">Support</a>
     </nav>
   </div>
@@ -28,178 +30,366 @@
 <main id="top">
 
   <div class="hero wrap">
-    <span class="eyebrow">100% Offline · Zero Permissions</span>
-    <h1>Your media,<br><span class="kanji">locked down.</span></h1>
+    <h1>Kura</h1>
     <p class="tagline">
-      Kura is an offline encrypted media vault for Android. AES-256-GCM with
-      hardware-backed keys — and not a single network permission.
+      An offline encrypted media vault for Android. Photos, videos, and GIFs are
+      encrypted with AES-256-GCM on import, keyed from the Android Keystore, and
+      never leave the device.
     </p>
     <div class="cta">
-      <a class="btn btn-primary" href="https://github.com/aurius7/kura/releases/latest/download/kura.apk">Download APK</a>
-      <a class="btn btn-ghost" href="https://github.com/aurius7/kura">View Source</a>
+      <a class="btn btn-primary" href="https://github.com/aurius7/kura/releases/latest/download/kura.apk">Download kura.apk</a>
+      <a class="btn btn-ghost" href="https://github.com/aurius7/kura">Source</a>
     </div>
     <div class="badges">
-      <span class="badge">No ads</span>
-      <span class="badge">No tracking</span>
-      <span class="badge">No accounts</span>
-      <span class="badge">MIT licensed</span>
-      <span class="badge">minSdk 26</span>
+      <span class="badge">v1.0.0</span>
+      <span class="badge">2.8 MB</span>
+      <span class="badge">Android 8.0+</span>
+      <span class="badge">1 permission</span>
+      <span class="badge">MIT</span>
     </div>
+    <p class="hero-note">
+      Sideload-only. Not on Play Store or F-Droid. Verify the signature before
+      you install — see <a href="#install">Install</a>.
+    </p>
   </div>
 
-  <section id="security">
+  <section id="protect">
     <div class="wrap">
-      <h2>Security architecture</h2>
+      <h2>What it protects against</h2>
       <p class="section-sub">
-        Every layer below is implemented in the app itself. There is no server
-        component, because there is no way to reach one.
+        Encryption at rest only helps against specific situations. These are the
+        ones it addresses.
       </p>
 
-      <p class="group-label">Encryption &amp; hardening</p>
-      <div class="grid">
-        <div class="card">
-          <h3><span class="ic">🔐</span> AES-256-GCM at rest</h3>
-          <p>Authenticated encryption with keys held in the Android keystore, never written to app storage.</p>
+      <div class="list">
+        <div class="item">
+          <h3>Someone with the unlocked phone</h3>
+          <p>
+            Imported media is ciphertext on disk. The system gallery, the
+            media scanner, and file browsers see an opaque blob, not images.
+            App files also sit in a credential-encrypted sandbox at mode 0600.
+          </p>
         </div>
-        <div class="card">
-          <h3><span class="ic">📁</span> Credential-encrypted sandbox</h3>
-          <p>App files live in a CE-protected sandbox with 0600 permissions.</p>
+        <div class="item">
+          <h3>A lost or stolen device</h3>
+          <p>
+            The AES key lives in the Android Keystore, which is typically bound
+            to the device's secure hardware. Pulling files off a flash dump
+            yields ciphertext. Deletions overwrite blocks several times with
+            pseudo-random data before unlinking, so removed files are not
+            recoverable from flash the way a plain <code>rm</code> would allow.
+          </p>
         </div>
-        <div class="card">
-          <h3><span class="ic">🧠</span> Memory zeroization</h3>
-          <p>Decrypted plaintext buffers and passphrases are overwritten with zeros in RAM immediately after use.</p>
+        <div class="item">
+          <h3>Someone going through your gallery</h3>
+          <p>
+            A scrambled keypad layout, optional FLAG_SECURE, and a configurable
+            auto-lock cover the shoulder-surfing and app-switcher cases. Three
+            wrong PIN entries trigger a 24-hour lockout, and each attempt is
+            timestamped into an intruder log you can review later.
+          </p>
         </div>
-        <div class="card">
-          <h3><span class="ic">🗑️</span> Multi-pass shredding</h3>
-          <p>Deleted files are overwritten with pseudo-random data before unlinking, so they are not recoverable from flash.</p>
-        </div>
-        <div class="card">
-          <h3><span class="ic">⏱️</span> Brute-force lockout</h3>
-          <p>A mandatory 24-hour lockout after 3 consecutive failed PIN attempts.</p>
-        </div>
-        <div class="card">
-          <h3><span class="ic">📝</span> Intruder attempt log</h3>
-          <p>Every failed PIN entry is timestamped and kept (last 50), with an unread counter and a clear-history action.</p>
-        </div>
-        <div class="card">
-          <h3><span class="ic">🤫</span> Flip-to-panic lock</h3>
-          <p>The accelerometer locks the vault the moment the screen is turned face down.</p>
-        </div>
-        <div class="card">
-          <h3><span class="ic">🕐</span> Auto-lock timeout</h3>
-          <p>Configurable delay after leaving the app, from immediate to never.</p>
-        </div>
-        <div class="card">
-          <h3><span class="ic">👆</span> Biometric unlock</h3>
-          <p>Optional fingerprint unlock alongside your PIN.</p>
-        </div>
-        <div class="card">
-          <h3><span class="ic">🚫</span> Screen privacy</h3>
-          <p>Optional FLAG_SECURE blocks screenshots and app-switcher previews.</p>
+        <div class="item">
+          <h3>Being asked to unlock it</h3>
+          <p>
+            A second, independent PIN opens a separate decoy vault. It is a real
+            working vault with its own media, not an error screen. Database
+            handles and decrypted buffers for the real vault are dropped on every
+            lock, and unlocking the decoy does not clear the real vault's
+            brute-force counter.
+          </p>
         </div>
       </div>
+    </div>
+  </section>
 
-      <p class="group-label" style="margin-top:44px">Coercion defense</p>
-      <div class="grid">
-        <div class="card">
-          <h3><span class="ic">🎭</span> Decoy vault</h3>
-          <p>A second, independent PIN opens a completely separate empty vault. The real vault's database handle, paths, and decrypted buffers are dropped on every lock, so a decoy session cannot reach real media even in memory.</p>
-        </div>
-        <div class="card">
-          <h3><span class="ic">🔀</span> Keypad scrambling</h3>
-          <p>The PIN keypad randomizes its digit layout on every entry, defeating shoulder surfing and smudge attacks.</p>
-        </div>
-        <div class="card">
-          <h3><span class="ic">🧷</span> Independent lockout</h3>
-          <p>Unlocking with the decoy PIN does not reset the real vault's brute-force counter, so it cannot be cleared by switching PINs.</p>
-        </div>
+  <section id="limits">
+    <div class="wrap">
+      <h2>What it does not protect against</h2>
+      <p class="section-sub">
+        Every project in this space should tell you this part. It is longer than
+        the marketing usually is.
+      </p>
+      <div class="callout">
+        <ul class="limits">
+          <li>
+            <strong>A compromised device.</strong> Malware with root or a kernel
+            exploit can read memory while the vault is open. Kura is not hardened
+            against kernel-level attackers, and no app-level encryption can be.
+          </li>
+          <li>
+            <strong>Screen recording and external cameras.</strong> FLAG_SECURE
+            blocks screenshots and previews, but it is optional and off by
+            default, and it does nothing about a second phone pointed at the
+            screen.
+          </li>
+          <li>
+            <strong>A four-digit PIN that you reuse.</strong> The PIN is stretched
+            with PBKDF2-HMAC-SHA256 at 120,000 iterations, which raises the cost of
+            guessing but does not make a weak PIN strong. The 24-hour lockout
+            slows online attempts, not a patient attacker with the encrypted
+            file. Treat the PIN as the weakest link, and prefer a longer one.
+          </li>
+          <li>
+            <strong>Coercion by someone who knows your habits.</strong> The decoy
+            vault only helps if you use it consistently and it contains something
+            plausible. If you never set one up, or set it up and then never post
+            to it, it is not a defence.
+          </li>
+          <li>
+            <strong>Backups you exported carelessly.</strong> A <code>.kura</code>
+            archive is encrypted with a passphrase you supply. That passphrase is
+            the only thing protecting it, and Kura cannot recover it for you.
+            There is no reset email and no backdoor, by design.
+          </li>
+          <li>
+            <strong>Bugs.</strong> This is version 1.0.0, written by one person
+            and not independently audited. The cryptography is standard library
+            primitives used conventionally, but the code around them has not been
+            reviewed by anyone but its author. Do not treat it as reviewed.
+          </li>
+        </ul>
       </div>
+    </div>
+  </section>
+
+  <section id="built">
+    <div class="wrap">
+      <h2>How it is built</h2>
+      <p class="section-sub">
+        Plain Kotlin against the platform APIs, with almost no dependencies. All
+        of these are checkable in the source.
+      </p>
+      <dl class="spec">
+        <dt>Language</dt>
+        <dd>Kotlin, 20 source files, about 10,700 lines</dd>
+
+        <dt>UI</dt>
+        <dd>Android Views and Material Components. No Compose, no XML layouts
+          beyond the framework's own.</dd>
+
+        <dt>Storage</dt>
+        <dd>Raw <code>SQLiteOpenHelper</code>, three tables. No Room, no ORM.</dd>
+
+        <dt>Dependencies</dt>
+        <dd>Six at runtime: appcompat, material, recyclerview, biometric,
+          security-crypto, documentfile. All first-party AndroidX. No analytics,
+          no crash reporting, no ad SDK, no network library.</dd>
+
+        <dt>Media crypto</dt>
+        <dd>AES-256-GCM per file. Master key from
+          <code>androidx.security.crypto.MasterKey</code> in the Android
+          Keystore, under the alias <code>kura_master</code>, using TEE or
+          StrongBox where the device offers it.</dd>
+
+        <dt>PIN storage</dt>
+        <dd>PBKDF2-HMAC-SHA256, 120,000 iterations, 16-byte random salt,
+          constant-time comparison. PINs set by older builds used a bare
+          SHA-256 digest; those are re-derived with the KDF on next unlock.</dd>
+
+        <dt>Backup crypto</dt>
+        <dd>AES-256-GCM with a key from PBKDF2-HMAC-SHA256 at 100,000 iterations
+          over a 16-byte salt. Each export gets a fresh salt and IV.</dd>
+
+        <dt>Shrinking</dt>
+        <dd>R8 code shrinking and resource shrinking are on for release builds.</dd>
+
+        <dt>Permissions</dt>
+        <dd>
+          <code>USE_BIOMETRIC</code> only, inherited from
+          <code>security-crypto</code>. The manifest declares no
+          <code>INTERNET</code>, so the app cannot open a socket even if it
+          wanted to.
+        </dd>
+      </dl>
     </div>
   </section>
 
   <section id="tagging">
     <div class="wrap">
-      <h2>Organized, not just hidden</h2>
+      <h2>Tagging</h2>
       <p class="section-sub">
-        A vault you can actually search. Kura uses booru-style category
-        prefixes to tag media, with a different color per category.
+        Most encrypted vaults are write-only: you can hide things, then never
+        find them again. Kura tags media with booru-style category prefixes, so
+        the vault stays searchable.
       </p>
-      <div class="grid">
-        <div class="card">
-          <h3><span class="ic">🏷️</span> Category prefixes</h3>
-          <p><code>c:</code> character, <code>a:</code> artist, <code>s:</code> series, <code>m:</code> meta. Prefixes drive sorting and filtering but stay hidden in the UI.</p>
+      <div class="list">
+        <div class="item">
+          <h3>Four categories</h3>
+          <p>
+            <code>c:</code> character, <code>a:</code> artist, <code>s:</code>
+            series, <code>m:</code> anything else. Each renders in its own
+            colour. The prefix is stored but not shown in the tag chip, so the
+            interface stays uncluttered while sorting and filtering still know
+            what a tag means.
+          </p>
         </div>
-        <div class="card">
-          <h3><span class="ic">🎨</span> Per-category colors</h3>
-          <p>Each category renders in its own color, so tags stay scannable at a glance and readable in monochrome mode.</p>
+        <div class="item">
+          <h3>Search that forgives prefixes</h3>
+          <p>
+            Typing <code>miku</code> matches <code>c:miku</code>. Prefix a term
+            with <code>-</code> to exclude it, and multiple terms are ANDed. There
+            is autocomplete over the tags you have actually used, so the
+            vocabulary is whatever your own library contains.
+          </p>
         </div>
-        <div class="card">
-          <h3><span class="ic">🔎</span> Smart search</h3>
-          <p>Searching <code>miku</code> also matches <code>c:miku</code>. Exclude with <code>-tag</code>. Multiple tags are ANDed together.</p>
-        </div>
-        <div class="card">
-          <h3><span class="ic">🗂️</span> Categories</h3>
-          <p>Separate flows for photos, videos, and GIFs, each independently hideable. Favorites, sorting, and grid density are all configurable.</p>
-        </div>
-        <div class="card">
-          <h3><span class="ic">🎨</span> Themes</h3>
-          <p>Dark, AMOLED, and light themes with accent colors and a monochrome mode.</p>
-        </div>
-        <div class="card">
-          <h3><span class="ic">📤</span> Portable backups</h3>
-          <p>Encrypted <code>.kura</code> archives with tag manifests, written anywhere via the system file picker. Auto-detects legacy formats and plain ZIP.</p>
-        </div>
-        <div class="card">
-          <h3><span class="ic">🧹</span> Import hygiene</h3>
-          <p>Optional delete-original-after-import, hash-based duplicate skipping, and a broken-media cleaner that reaps zero-byte records.</p>
-        </div>
-        <div class="card">
-          <h3><span class="ic">🎬</span> Playback control</h3>
-          <p>Per-video autoplay and start-muted, grid badges, and a toggle for media details in the viewer.</p>
-        </div>
-        <div class="card">
-          <h3><span class="ic">🧭</span> In-app guides</h3>
-          <p>An interactive walkthrough of the tag system, plus a replayable coachmark tour of the main and detail views.</p>
+        <div class="item">
+          <h3>Separate media flows</h3>
+          <p>
+            Photos, videos, and GIFs each get their own view and can be hidden
+            independently. Grid density, sort order, and favourites are
+            configurable, and video autoplay and start-muted are per-setting
+            rather than global.
+          </p>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="permissions">
+  <section id="features">
     <div class="wrap">
-      <div class="callout">
-        <h3>One permission. That's the whole list.</h3>
+      <h2>Everything else</h2>
+      <div class="list">
+        <div class="item">
+          <h3>Import and export</h3>
+          <p>
+            Import from the system picker, share into the app from any gallery,
+            or move whole folders in and out. Backups are <code>.kura</code>
+            archives carrying a tag manifest, written wherever the system file
+            picker points. Restore also reads the older <code>.kuro</code> and
+            <code>.vbooru</code> formats and plain ZIP.
+          </p>
+        </div>
+        <div class="item">
+          <h3>Import hygiene</h3>
+          <p>
+            Optional delete-original-after-import, hash-based duplicate skipping,
+            and a maintenance action that clears out zero-byte records left
+            behind by an interrupted delete.
+          </p>
+        </div>
+        <div class="item">
+          <h3>Flip-to-panic</h3>
+          <p>
+            When the feature is on, turning the screen face down locks the vault
+            immediately. Triggered by the accelerometer, not by a timer, so it
+            does not fire while the phone is lying flat on a desk.
+          </p>
+        </div>
+        <div class="item">
+          <h3>Look</h3>
+          <p>
+            Dark, AMOLED, and light themes, accent colours, a monochrome mode,
+            and a choice of launcher icons. The tag guide and a coachmark tour
+            are built in, and both are replayable from Settings.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="install">
+    <div class="wrap">
+      <h2>Install</h2>
+      <p class="section-sub">
+        There is no store listing, so you install the APK yourself. Check the
+        signature.
+      </p>
+      <ol class="steps">
+        <li>
+          Download <code>kura.apk</code> from the
+          <a href="https://github.com/aurius7/kura/releases/latest">releases page</a>.
+        </li>
+        <li>
+          Confirm the signing certificate matches the one below. The key is
+          stable across releases, so you only need to check it once:
+          <pre>SHA-256: ad9059713b4d8d998c025f231023f18875699c7ef34b767bba6e5e6f114a1f3f</pre>
+        </li>
+        <li>
+          Allow your file manager or browser to install unknown apps, then open
+          the APK. Turn that permission back off afterwards.
+        </li>
+      </ol>
+      <p class="section-sub" style="margin-top:26px">
+        To verify it yourself, pull the APK out of the release and run:
+      </p>
+      <pre>apksigner verify --print-certs kura.apk
+aapt dump permissions kura.apk</pre>
+      <p class="footnote">
+        Builds are reproducible enough to trust but not bit-for-bit identical
+        across machines. If the digest above ever changes, that is either a new
+        signing key or a compromised one, and you should stop and ask.
+      </p>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap">
+      <h2>Questions</h2>
+
+      <details>
+        <summary>Does it need an account?</summary>
         <p>
-          Kura declares only <code>USE_BIOMETRIC</code>, used solely to unlock
-          your vault. There is no <code>INTERNET</code> permission, no analytics,
-          and no third-party SDKs. The app is architecturally incapable of
-          phoning home — and you can check for yourself:
+          No. There is no signup, no server, and no recovery address. That also
+          means nobody can reset your PIN for you, including the author.
         </p>
-        <pre>aapt dump permissions kura.apk</pre>
-      </div>
-    </div>
-  </section>
+      </details>
 
-  <section id="shots">
-    <div class="wrap">
-      <h2>Screens</h2>
-      <p class="section-sub">Captured from the release build.</p>
-      <div class="shots">
-        <div class="shot">Vault grid<br>placeholder</div>
-        <div class="shot">Lock screen<br>placeholder</div>
-        <div class="shot">Tagging &amp; search<br>placeholder</div>
-      </div>
+      <details>
+        <summary>Can I get my files back if I lose the phone?</summary>
+        <p>
+          Only from a <code>.kura</code> archive you exported first, and only
+          with the passphrase you protected it with. There is no cloud copy and
+          no backup service.
+        </p>
+      </details>
+
+      <details>
+        <summary>Is this an audited vault?</summary>
+        <p>
+          No. It uses standard primitives in the conventional way, but nobody
+          outside the project has read the code. If you need an audited vault,
+          this is not one.
+        </p>
+      </details>
+
+      <details>
+        <summary>Why no Play Store listing?</summary>
+        <p>
+          Sideloading sidesteps Play's data-safety form, which for an app like
+          this is mostly a list of things it does not do anyway. The trade-off
+          is that you have to check the signature yourself, which the install
+          section covers.
+        </p>
+      </details>
+
+      <details>
+        <summary>Does the decoy vault look different?</summary>
+        <p>
+          No, deliberately. It is the same app, same icon, same layout. A decoy
+          that gives itself away is worse than none, so the only difference is
+          which PIN you entered and therefore which vault you land in.
+        </p>
+      </details>
+
+      <details>
+        <summary>Why is it called Kura?</summary>
+        <p>
+          蔵, the kanji for storehouse or vault. It is also close enough to how
+          people already say "kura" that nobody has to learn a new word for it.
+        </p>
+      </details>
     </div>
   </section>
 
   <section id="support">
     <div class="wrap">
       <div class="support">
-        <h2>☕ Support Kura</h2>
+        <h2>Support</h2>
         <p>
-          Kura is free, ad-free, tracker-free, and account-free — and it stays
-          that way. If it earned its keep, a tip helps keep updates coming.
-          The same link is in the app under Settings.
+          Kura is free, has no ads, no tracking, and no accounts, and stays that
+          way. If it earned its place on your phone, a tip helps keep updates
+          coming. The same link is in the app under Settings.
         </p>
         <a class="btn btn-primary" href="https://buymeacoffee.com/theauriusk">Buy Me a Coffee</a>
       </div>
@@ -210,11 +400,11 @@
 
 <footer>
   <div class="wrap">
-    <span>Kura — offline encrypted media vault for Android.</span>
+    <span>Kura v1.0.0 — encrypted media vault for Android.</span>
     <span>
       <a href="https://github.com/aurius7/kura">Source</a> ·
       <a href="https://github.com/aurius7/kura/releases/latest">Releases</a> ·
-      <a href="https://github.com/aurius7/kura/blob/main/LICENSE">MIT License</a>
+      <a href="https://github.com/aurius7/kura/blob/main/LICENSE">MIT</a>
     </span>
   </div>
 </footer>
