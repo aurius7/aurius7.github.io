@@ -297,28 +297,33 @@
       </p>
       <ol class="steps">
         <li>
-          Download <code>kura.apk</code> from the
+          Download <code>kura.apk</code> and <code>SHA256SUMS.txt</code> from the
           <a href="https://github.com/aurius7/kura/releases/latest">releases page</a>.
         </li>
         <li>
-          Confirm the signing certificate matches the one below. The key is
-          stable across releases, so you only need to check it once:
-          <pre>SHA-256: ad9059713b4d8d998c025f231023f18875699c7ef34b767bba6e5e6f114a1f3f</pre>
+          Check the file you got. This catches a truncated or substituted download:
+          <pre>sha256sum -c SHA256SUMS.txt</pre>
         </li>
         <li>
-          Allow your file manager or browser to install unknown apps, then open
-          the APK. Turn that permission back off afterwards.
+          Then check who signed it. The key is stable for the life of the app, so
+          this only needs doing once:
+          <pre>apksigner verify --print-certs kura.apk</pre>
+          <p class="step-note">
+            Expect <code>SHA-256: ad9059713b4d8d998c025f231023f18875699c7ef34b767bba6e5e6f114a1f3f</code>.
+            Android pins this certificate at first install, so it cannot change
+            without becoming a different app rather than an update. A build that
+            prints something else is not from this project.
+          </p>
+        </li>
+        <li>
+          Allow your browser or file manager to install unknown apps, open the APK,
+          then turn that permission back off.
         </li>
       </ol>
-      <p class="section-sub" style="margin-top:26px">
-        To verify it yourself, pull the APK out of the release and run:
-      </p>
-      <pre>apksigner verify --print-certs kura.apk
-aapt dump permissions kura.apk</pre>
       <p class="footnote">
-        Builds are reproducible enough to trust but not bit-for-bit identical
-        across machines. If the digest above ever changes, that is either a new
-        signing key or a compromised one, and you should stop and ask.
+        The checksum covers the file as published, not a rebuild of it. Gradle
+        does not produce bit-identical APKs across machines, so an APK you build
+        from source will not match the hash — only the signing certificate will.
       </p>
     </div>
   </section>

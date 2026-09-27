@@ -360,6 +360,12 @@ ol + p {
   margin-top: 11px;
 }
 
+.step-note {
+  margin: 11px 0 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
 /* ---------- faq ---------- */
 
 details {
