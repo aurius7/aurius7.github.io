@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kura — Offline Encrypted Media Vault for Android</title>
+<meta name="description" content="Kura is an offline encrypted media vault for Android. AES-256-GCM with hardware-backed keys, zero network permissions, no ads, no tracking, no accounts.">
+<meta property="og:title" content="Kura — Offline Encrypted Media Vault">
+<meta property="og:description" content="AES-256-GCM at rest, hardware-backed keys, and not a single network permission. An offline encrypted media vault for Android with booru-style tagging.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#121212">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="mark">蔵</span> Kura</a>
+    <nav>
+      <a href="#security">Security</a>
+      <a href="#tagging">Tagging</a>
+      <a href="#permissions">Permissions</a>
+      <a href="#support">Support</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <div class="hero wrap">
+    <span class="eyebrow">100% Offline · Zero Permissions</span>
+    <h1>Your media,<br><span class="kanji">locked down.</span></h1>
+    <p class="tagline">
+      Kura is an offline encrypted media vault for Android. AES-256-GCM with
+      hardware-backed keys — and not a single network permission.
+    </p>
+    <div class="cta">
+      <a class="btn btn-primary" href="https://github.com/aurius7/kura/releases/latest/download/kura.apk">Download APK</a>
+      <a class="btn btn-ghost" href="https://github.com/aurius7/kura">View Source</a>
+    </div>
+    <div class="badges">
+      <span class="badge">No ads</span>
+      <span class="badge">No tracking</span>
+      <span class="badge">No accounts</span>
+      <span class="badge">MIT licensed</span>
+      <span class="badge">minSdk 26</span>
+    </div>
+  </div>
+
+  <section id="security">
+    <div class="wrap">
+      <h2>Security architecture</h2>
+      <p class="section-sub">
+        Every layer below is implemented in the app itself. There is no server
+        component, because there is no way to reach one.
+      </p>
+
+      <p class="group-label">Encryption &amp; hardening</p>
+      <div class="grid">
+        <div class="card">
+          <h3><span class="ic">🔐</span> AES-256-GCM at rest</h3>
+          <p>Authenticated encryption with keys held in the Android keystore, never written to app storage.</p>
+        </div>
+        <div class="card">
+          <h3><span class="ic">📁</span> Credential-encrypted sandbox</h3>
+          <p>App files live in a CE-protected sandbox with 0600 permissions.</p>
+        </div>
+        <div class="card">
+          <h3><span class="ic">🧠</span> Memory zeroization</h3>
+          <p>Decrypted plaintext buffers and passphrases are overwritten with zeros in RAM immediately after use.</p>
+        </div>
+        <div class="card">
+          <h3><span class="ic">🗑️</span> Multi-pass shredding</h3>
+          <p>Deleted files are overwritten with pseudo-random data before unlinking, so they are not recoverable from flash.</p>
+        </div>
+        <div class="card">
+          <h3><span class="ic">⏱️</span> Brute-force lockout</h3>
+          <p>A mandatory 24-hour lockout after 3 consecutive failed PIN attempts.</p>
+        </div>
+        <div class="card">
+          <h3><span class="ic">👆</span> Biometric unlock</h3>
+          <p>Optional fingerprint unlock alongside your PIN.</p>
+        </div>
+        <div class="card">
+          <h3><span class="ic">🚫</span> Screen privacy</h3>
+          <p>Optional FLAG_SECURE blocks screenshots and app-switcher previews.</p>
+        </div>
+      </div>
+
+      <p class="group-label" style="margin-top:44px">Coercion defense</p>
+      <div class="grid">
+        <div class="card">
+          <h3><span class="ic">🎭</span> Decoy vault</h3>
+          <p>A second, independent PIN opens a completely separate empty vault. The real vault's database handle, paths, and decrypted buffers are dropped on every lock, so a decoy session cannot reach real media even in memory.</p>
+        </div>
+        <div class="card">
+          <h3><span class="ic">🔀</span> Keypad scrambling</h3>
+          <p>The PIN keypad randomizes its digit layout on every entry, defeating shoulder surfing and smudge attacks.</p>
+        </div>
+        <div class="card">
+          <h3><span class="ic">🧷</span> Independent lockout</h3>
+          <p>Unlocking with the decoy PIN does not reset the real vault's brute-force counter, so it cannot be cleared by switching PINs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tagging">
+    <div class="wrap">
+      <h2>Organized, not just hidden</h2>
+      <p class="section-sub">
+        A vault you can actually search. Kura uses booru-style category
+        prefixes to tag media, with a different color per category.
+      </p>
+      <div class="grid">
+        <div class="card">
+          <h3><span class="ic">🏷️</span> Category prefixes</h3>
+          <p><code>c:</code> character, <code>a:</code> artist, <code>s:</code> series, <code>m:</code> meta. Prefixes drive sorting and filtering but stay hidden in the UI.</p>
+        </div>
+        <div class="card">
+          <h3><span class="ic">🎨</span> Per-category colors</h3>
+          <p>Each category renders in its own color, so tags stay scannable at a glance and readable in monochrome mode.</p>
+        </div>
+        <div class="card">
+          <h3><span class="ic">🔎</span> Smart search</h3>
+          <p>Searching <code>miku</code> also matches <code>c:miku</code>. Exclude with <code>-tag</code>. Multiple tags are ANDed together.</p>
+        </div>
+        <div class="card">
+          <h3><span class="ic">🗂️</span> Categories</h3>
+          <p>Separate flows for photos, videos, and GIFs, each independently hideable. Favorites, sorting, and grid density are all configurable.</p>
+        </div>
+        <div class="card">
+          <h3><span class="ic">🎨</span> Themes</h3>
+          <p>Dark, AMOLED, and light themes with accent colors and a monochrome mode.</p>
+        </div>
+        <div class="card">
+          <h3><span class="ic">📤</span> Portable backups</h3>
+          <p>Encrypted <code>.kura</code> archives with tag manifests, written anywhere via the system file picker. Auto-detects legacy formats and plain ZIP.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="permissions">
+    <div class="wrap">
+      <div class="callout">
+        <h3>One permission. That's the whole list.</h3>
+        <p>
+          Kura declares only <code>USE_BIOMETRIC</code>, used solely to unlock
+          your vault. There is no <code>INTERNET</code> permission, no analytics,
+          and no third-party SDKs. The app is architecturally incapable of
+          phoning home — and you can check for yourself:
+        </p>
+        <pre>aapt dump permissions kura.apk</pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="shots">
+    <div class="wrap">
+      <h2>Screens</h2>
+      <p class="section-sub">Captured from the release build.</p>
+      <div class="shots">
+        <div class="shot">Vault grid<br>placeholder</div>
+        <div class="shot">Lock screen<br>placeholder</div>
+        <div class="shot">Tagging &amp; search<br>placeholder</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="support">
+    <div class="wrap">
+      <div class="support">
+        <h2>☕ Support Kura</h2>
+        <p>
+          Kura is free, ad-free, tracker-free, and account-free — and it stays
+          that way. If it earned its keep, a tip helps keep updates coming.
+          The same link is in the app under Settings.
+        </p>
+        <a class="btn btn-primary" href="https://buymeacoffee.com/theauriusk">Buy Me a Coffee</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Kura — offline encrypted media vault for Android.</span>
+    <span>
+      <a href="https://github.com/aurius7/kura">Source</a> ·
+      <a href="https://github.com/aurius7/kura/releases/latest">Releases</a> ·
+      <a href="https://github.com/aurius7/kura/blob/main/LICENSE">MIT License</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>
