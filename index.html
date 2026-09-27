@@ -73,11 +73,12 @@
         <div class="item">
           <h3>A lost or stolen device</h3>
           <p>
-            The AES key lives in the Android Keystore, which is typically bound
-            to the device's secure hardware. Pulling files off a flash dump
-            yields ciphertext. Deletions overwrite blocks several times with
-            pseudo-random data before unlinking, so removed files are not
-            recoverable from flash the way a plain <code>rm</code> would allow.
+            The AES key lives in the Android Keystore, which is bound to the
+            device's secure hardware where the device has it. Pulling files off
+            a flash dump yields ciphertext. Deleted files are overwritten with a
+            single pass of zeros before unlinking, which is defence in depth
+            rather than a promise: flash wears blocks out and remaps them, so
+            this cannot guarantee erasure the way it would on a spinning disk.
           </p>
         </div>
         <div class="item">
@@ -140,7 +141,10 @@
             <strong>Backups you exported carelessly.</strong> A <code>.kura</code>
             archive is encrypted with a passphrase you supply. That passphrase is
             the only thing protecting it, and Kura cannot recover it for you.
-            There is no reset email and no backdoor, by design.
+            There is no reset email and no backdoor, by design. The archive key
+            derivation is PBKDF2 at 100,000 iterations &mdash; enough to stop
+            casual attacks, below the usual guidance for dedicated offline
+            cracking.
           </li>
           <li>
             <strong>Bugs.</strong> This is version 1.0.0, written by one person
