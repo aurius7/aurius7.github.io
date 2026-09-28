@@ -280,6 +280,29 @@ h2 {
   font-size: 15px;
 }
 
+/* Data-loss warning: same palette, but a heavier frame so it reads as an
+   alert rather than an aside. Used for "never uninstall". */
+.callout-danger {
+  border: 2px solid var(--accent-line);
+  border-left-width: 6px;
+  background: var(--accent-soft);
+  padding: 22px 24px;
+  margin: 22px 0 26px;
+}
+
+.callout-danger p {
+  color: var(--bg);
+  margin: 0 0 12px;
+}
+
+.callout-danger p:last-child {
+  margin-bottom: 0;
+}
+
+.callout-danger strong {
+  color: var(--accent);
+}
+
 pre {
   background: var(--bg);
   border: 1px solid var(--border);

@@ -295,6 +295,20 @@
   <section id="install">
     <div class="wrap">
       <h2>Install</h2>
+      <div class="callout callout-danger">
+        <p>
+          <strong>Never uninstall Kura to reinstall or upgrade it.</strong> Removing
+          the app destroys the vault and everything in it. The encryption key lives
+          in the Android Keystore and is deleted along with the app, so there is no
+          recovery — not from a backup, not from support, not from anyone. To
+          upgrade, download the new APK and install it over the top. Android will
+          replace the old version and keep your vault.
+        </p>
+        <p>
+          If the launcher icon is missing or the app will not open, that is a bug,
+          not a reason to uninstall. Install over the top and it is fixed.
+        </p>
+      </div>
       <p class="section-sub">
         There is no store listing, so you install the APK yourself. Check the
         signature.
@@ -304,6 +318,9 @@
           Download <code>kura_v1.0.1.apk</code> and <code>SHA256SUMS.txt</code>
           from the
           <a href="https://github.com/aurius7/kura/releases/tag/v1.0.1">v1.0.1 release page</a>.
+          If you downloaded this file before 28 September 2026, download it again:
+          the asset was replaced with <code>versionCode 15</code>, which fixes an
+          auto-lock bug. Earlier copies report <code>versionCode 14</code>.
         </li>
         <li>
           Check the file you got. This catches a truncated or substituted download:
@@ -402,6 +419,17 @@
           coming. The same link is in the app under Settings.
         </p>
         <a class="btn btn-primary" href="https://buymeacoffee.com/theauriusk">Buy Me a Coffee</a>
+        <h3>Found a security problem?</h3>
+        <p>
+          Please report it privately through GitHub's advisory form rather than
+          in a public issue, so a fix can ship before the problem is known.
+          The policy also lists what is a documented limitation rather than a
+          bug.
+        </p>
+        <p>
+          <a href="https://github.com/aurius7/kura/blob/main/SECURITY.md">Read the security policy</a>
+          · <a href="https://github.com/aurius7/kura/security/advisories/new">Report privately</a>
+        </p>
       </div>
     </div>
   </section>
@@ -414,6 +442,7 @@
     <span>
       <a href="https://github.com/aurius7/kura">Source</a> ·
       <a href="https://github.com/aurius7/kura/releases/latest">Releases</a> ·
+      <a href="https://github.com/aurius7/kura/blob/main/SECURITY.md">Security</a> ·
       <a href="https://github.com/aurius7/kura/blob/main/LICENSE">MIT</a>
     </span>
   </div>
