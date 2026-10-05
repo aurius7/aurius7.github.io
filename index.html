@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kura — encrypted media vault for Android</title>
-<meta name="description" content="Kura is an offline encrypted media vault for Android. AES-256-GCM, keys in the Android Keystore, verified in-app updates, and a build that declares no INTERNET permission. No analytics, no accounts.">
+<meta name="description" content="Kura is an encrypted media vault for Android. AES-256-GCM, keys in the Android Keystore, verified in-app updates, and a build that declares no INTERNET permission. No analytics, no accounts.">
 <meta property="og:title" content="Kura — encrypted media vault for Android">
-<meta property="og:description" content="AES-256-GCM at rest, keys in the Android Keystore, and an offline build that declares no network permission. Updates you can verify from inside the app.">
+<meta property="og:description" content="AES-256-GCM at rest, keys in the Android Keystore, and a build that declares no network permission. Updates you can verify from inside the app.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#121212">
 <link rel="stylesheet" href="assets/style.css">
@@ -32,17 +32,17 @@
   <div class="hero wrap">
     <h1>Kura</h1>
     <p class="tagline">
-      An offline encrypted media vault for Android. Photos, videos, and GIFs are
+      An encrypted media vault for Android. Photos, videos, and GIFs are
       encrypted with AES-256-GCM on import, keyed from the Android Keystore, and
       never leave the device.
     </p>
     <div class="cta">
-      <a class="btn btn-primary" href="https://github.com/aurius7/kura/releases/download/v1.0.3/kura_v1.0.3.apk">Download kura_v1.0.3.apk</a>
-      <a class="btn btn-ghost" href="https://github.com/aurius7/kura/releases/download/v1.0.3/kura_v1.0.3-online.apk">or the online build</a>
+      <a class="btn btn-primary" href="https://github.com/aurius7/kura/releases/download/v1.0.4/kura_v1.0.4.apk">Download kura_v1.0.4.apk</a>
+      <a class="btn btn-ghost" href="https://github.com/aurius7/kura/releases/download/v1.0.4/kura_v1.0.4-network.apk">or the build with network updates</a>
       <a class="btn btn-ghost" href="https://github.com/aurius7/kura">Source</a>
     </div>
     <div class="badges">
-      <span class="badge">v1.0.3</span>
+      <span class="badge">v1.0.4</span>
       <span class="badge">2.8 MB</span>
       <span class="badge">Android 8.0+</span>
       <span class="badge">No INTERNET permission</span>
@@ -209,7 +209,7 @@
           <code>REQUEST_INSTALL_PACKAGES</code>, which grants no data access and
           no network access — it exists only because Android has no silent
           install, so putting an APK in front of the system installer requires it.
-          The offline build declares no <code>INTERNET</code> and cannot open a
+          The default build declares no <code>INTERNET</code> and cannot open a
           socket. The online build declares it, for one request. Cleartext traffic
           is refused in both.
         </dd>
@@ -307,8 +307,8 @@
           <p>
             Both builds accept an APK already on the device. Open
             Settings &rarr; Updates &rarr; <em>Install from a file</em>, pick it,
-            and it is verified the same three ways. That is the offline build's
-            only route, and it is why the offline build holds
+            and it is verified the same three ways. That is the default build's
+            only route, and it is why it holds
             <code>REQUEST_INSTALL_PACKAGES</code>: the permission allows the
             prompt, and nothing else.
           </p>
@@ -349,13 +349,13 @@
       <ol class="steps">
         <li>
           Pick a build from the
-          <a href="https://github.com/aurius7/kura/releases/tag/v1.0.3">v1.0.3 release page</a>
+          <a href="https://github.com/aurius7/kura/releases/tag/v1.0.4">v1.0.4 release page</a>
           and download it with <code>SHA256SUMS.txt</code>:
           <table class="builds">
-            <tr><th><code>kura_v1.0.3.apk</code></th><td>Offline. Declares no
-              <code>INTERNET</code> permission. Updating means pointing Kura at an
+            <tr><th><code>kura_v1.0.4.apk</code></th><td>The default build. Declares
+              no <code>INTERNET</code> permission. Updating means pointing Kura at an
               APK you already have.</td></tr>
-            <tr><th><code>kura_v1.0.3-online.apk</code></th><td>Adds one network
+            <tr><th><code>kura_v1.0.4-network.apk</code></th><td>Adds one network
               permission, used only to ask whether a newer version exists.</td></tr>
           </table>
           Both are <code>versionCode 17</code> and are signed with the same key, so
@@ -363,10 +363,10 @@
           vault. They are the same app otherwise; choose by whether you want the
           network permission to exist at all.
           <p class="step-note">
-            If you have a copy of <code>kura_v1.0.2.apk</code> from before
-            5 October 2026, it still installs, but the tag search in that build
-            reports no matches for a tag you have already typed. It reports
-            <code>versionCode 16</code>, so the app will offer you v1.0.3 by itself.
+            If you are on v1.0.3, open the app and tap Scan: it will find v1.0.4
+            by itself. That build reports update failures accurately — v1.0.3 said
+            only "check the network" whatever had actually gone wrong, which is a
+            guess that is usually wrong.
           </p>
         </li>
         <li>
@@ -376,7 +376,7 @@
         <li>
           Then check who signed it. The key is stable for the life of the app, so
           this only needs doing once:
-          <pre>apksigner verify --print-certs kura_v1.0.3.apk</pre>
+          <pre>apksigner verify --print-certs kura_v1.0.4.apk</pre>
           <p class="step-note">
             Expect <code>SHA-256: ad9059713b4d8d998c025f231023f18875699c7ef34b767bba6e5e6f114a1f3f</code>.
             Android pins this certificate at first install, so it cannot change
@@ -485,7 +485,7 @@
 
 <footer>
   <div class="wrap">
-    <span>Kura v1.0.3 — encrypted media vault for Android.</span>
+    <span>Kura v1.0.4 — encrypted media vault for Android.</span>
     <span>
       <a href="https://github.com/aurius7/kura">Source</a> ·
       <a href="https://github.com/aurius7/kura/releases/latest">Releases</a> ·
