@@ -37,11 +37,11 @@
       never leave the device.
     </p>
     <div class="cta">
-      <a class="btn btn-primary" href="https://github.com/aurius7/kura/releases/download/v1.0.1/kura_v1.0.1.apk">Download kura_v1.0.1.apk</a>
+      <a class="btn btn-primary" href="https://github.com/aurius7/kura/releases/download/v1.0.2/kura_v1.0.2.apk">Download kura_v1.0.2.apk</a>
       <a class="btn btn-ghost" href="https://github.com/aurius7/kura">Source</a>
     </div>
     <div class="badges">
-      <span class="badge">v1.0.1</span>
+      <span class="badge">v1.0.2</span>
       <span class="badge">2.8 MB</span>
       <span class="badge">Android 8.0+</span>
       <span class="badge">1 permission</span>
@@ -142,12 +142,12 @@
             archive is encrypted with a passphrase you supply. That passphrase is
             the only thing protecting it, and Kura cannot recover it for you.
             There is no reset email and no backdoor, by design. The archive key
-            derivation is PBKDF2 at 100,000 iterations &mdash; enough to stop
+            derivation is PBKDF2 at 120,000 iterations &mdash; enough to stop
             casual attacks, below the usual guidance for dedicated offline
             cracking.
           </li>
           <li>
-            <strong>Bugs.</strong> This is version 1.0.0, written by one person
+            <strong>Bugs.</strong> This is version 1.0.2, written by one person
             and not independently audited. The cryptography is standard library
             primitives used conventionally, but the code around them has not been
             reviewed by anyone but its author. Do not treat it as reviewed.
@@ -192,7 +192,7 @@
           SHA-256 digest; those are re-derived with the KDF on next unlock.</dd>
 
         <dt>Backup crypto</dt>
-        <dd>AES-256-GCM with a key from PBKDF2-HMAC-SHA256 at 100,000 iterations
+        <dd>AES-256-GCM with a key from PBKDF2-HMAC-SHA256 at 120,000 iterations
           over a 16-byte salt. Each export gets a fresh salt and IV.</dd>
 
         <dt>Shrinking</dt>
@@ -315,12 +315,13 @@
       </p>
       <ol class="steps">
         <li>
-          Download <code>kura_v1.0.1.apk</code> and <code>SHA256SUMS.txt</code>
+          Download <code>kura_v1.0.2.apk</code> and <code>SHA256SUMS.txt</code>
           from the
-          <a href="https://github.com/aurius7/kura/releases/tag/v1.0.1">v1.0.1 release page</a>.
-          If you downloaded this file before 28 September 2026, download it again:
-          the asset was replaced with <code>versionCode 15</code>, which fixes an
-          auto-lock bug. Earlier copies report <code>versionCode 14</code>.
+          <a href="https://github.com/aurius7/kura/releases/tag/v1.0.2">v1.0.2 release page</a>.
+          It installs over v1.0.1 without touching your vault. If you have a copy of
+          <code>kura_v1.0.1.apk</code> from before 28 September 2026, replace it: that
+          asset was replaced with <code>versionCode 15</code>, which fixes an auto-lock
+          bug, and the older file reports <code>versionCode 14</code>.
         </li>
         <li>
           Check the file you got. This catches a truncated or substituted download:
@@ -329,7 +330,7 @@
         <li>
           Then check who signed it. The key is stable for the life of the app, so
           this only needs doing once:
-          <pre>apksigner verify --print-certs kura_v1.0.1.apk</pre>
+          <pre>apksigner verify --print-certs kura_v1.0.2.apk</pre>
           <p class="step-note">
             Expect <code>SHA-256: ad9059713b4d8d998c025f231023f18875699c7ef34b767bba6e5e6f114a1f3f</code>.
             Android pins this certificate at first install, so it cannot change
@@ -438,7 +439,7 @@
 
 <footer>
   <div class="wrap">
-    <span>Kura v1.0.1 — encrypted media vault for Android.</span>
+    <span>Kura v1.0.2 — encrypted media vault for Android.</span>
     <span>
       <a href="https://github.com/aurius7/kura">Source</a> ·
       <a href="https://github.com/aurius7/kura/releases/latest">Releases</a> ·
